@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
+import com.example.profilecardlayout.ui.theme.lightGreen
 import java.security.Provider
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen() {
         androidx.compose.material.Surface(modifier = Modifier.fillMaxSize(),
-        color = Color.DarkGray) {
+        ) {
             ProfileCard()
 
         }
@@ -47,7 +48,7 @@ class MainActivity : ComponentActivity() {
         Card(modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
-            .wrapContentHeight(align = Alignment.Top),elevation = 8.dp) {
+            .wrapContentHeight(align = Alignment.Top),elevation = 8.dp,backgroundColor = Color.White) {
 
             Row(modifier = Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start) {
@@ -59,7 +60,7 @@ class MainActivity : ComponentActivity() {
     }
     @Composable
     fun ProfilePicture(){
-        Card(shape = CircleShape, border = BorderStroke(width = 2.dp, color = Color.Green),
+        Card(shape = CircleShape, border = BorderStroke(width = 2.dp, color = MaterialTheme.colors.lightGreen),
         modifier = Modifier.padding(16.dp),elevation = 4.dp) {
             Image(painter = painterResource(id = R.drawable.neweasyday),
                 contentDescription ="Content description" ,
@@ -71,10 +72,12 @@ class MainActivity : ComponentActivity() {
     }
     @Composable
     fun ProfileContent(){
-        Column(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+        Column(modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()) {
             Text(text = "John Doe",style = MaterialTheme.typography.h5)
 
-            
+
             Text(text = "Active Now", style = MaterialTheme.typography.body2)
 
         }
@@ -85,6 +88,9 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        MainScreen()
+        ProfileCardLayoutTheme {
+            MainScreen()
+        }
+
     }
 }
