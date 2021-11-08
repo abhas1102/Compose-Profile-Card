@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
+import java.security.Provider
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +44,10 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun ProfileCard(){
-        Card(modifier = Modifier.padding(16.dp).fillMaxWidth().wrapContentHeight(align = Alignment.Top),elevation = 8.dp) {
+        Card(modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .wrapContentHeight(align = Alignment.Top),elevation = 8.dp) {
 
             Row(modifier = Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start) {
@@ -67,7 +71,14 @@ class MainActivity : ComponentActivity() {
     }
     @Composable
     fun ProfileContent(){
-        Text(text = "John Doe")
+        Column(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+            Text(text = "John Doe",style = MaterialTheme.typography.h5)
+
+            
+            Text(text = "Active Now", style = MaterialTheme.typography.body2)
+
+        }
+
 
     }
 
