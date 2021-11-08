@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun AppBar(){
-        TopAppBar(navigationIcon = {Icon(Icons.Default.Home,"Content description",modifier = Modifier.padding(horizontal = 14.dp))},
+        TopAppBar(navigationIcon = {Icon(Icons.Default.Home,"Content description",modifier = Modifier.padding(horizontal = 12.dp))},
         title = { Text("Messaging Application Users")})
     }
 
