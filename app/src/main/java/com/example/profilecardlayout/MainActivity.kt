@@ -21,6 +21,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.example.profilecardlayout.ui.theme.lightGreen
 import java.security.Provider
@@ -88,9 +90,15 @@ class MainActivity : ComponentActivity() {
                                                                                 else Color.Red
         ),
         modifier = Modifier.padding(16.dp),elevation = 4.dp) {
-            Image(painter = painterResource(id = drawableId),
+
+          /*  Image(painter = painterResource(id = drawableId),
                 contentDescription ="Content description" ,
-                modifier = Modifier.size(72.dp),contentScale = ContentScale.Crop)
+                modifier = Modifier.size(72.dp),contentScale = ContentScale.Crop) */
+            Image(
+                painter = rememberImagePainter(drawableId,builder = {transformations(CircleCropTransformation())}),
+                contentDescription = "Visually differently abled",
+                modifier = Modifier.size(72.dp)
+            )
 
         }
 
