@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
@@ -77,19 +78,21 @@ class MainActivity : ComponentActivity() {
 
             Row(modifier = Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start) {
-                ProfilePicture(userProfile.pictureUrl,userProfile.status)
-                ProfileContent(userProfile.name, userProfile.status)
+                ProfilePicture(userProfile.pictureUrl,userProfile.status,72.dp)
+                ProfileContent(userProfile.name, userProfile.status,Alignment.Start)
             }
 
         }
     }
     @Composable
-    fun ProfilePicture(pictureUrl:String, onlineStatus:Boolean){
+    fun ProfilePicture(pictureUrl:String, onlineStatus:Boolean, imageSize:Dp){
         Card(shape = CircleShape, border = BorderStroke(width = 2.dp, color = if (onlineStatus)
                                                                                 MaterialTheme.colors.lightGreen
                                                                                 else Color.Red
         ),
-        modifier = Modifier.padding(16.dp),elevation = 4.dp) {
+        modifier = Modifier
+            .padding(16.dp)
+            .size(imageSize),elevation = 4.dp) {
 
           /*  Image(painter = painterResource(id = drawableId),
                 contentDescription ="Content description" ,
@@ -105,10 +108,10 @@ class MainActivity : ComponentActivity() {
 
     }
     @Composable
-    fun ProfileContent(userName:String, onlineStatus: Boolean){
+    fun ProfileContent(userName:String, onlineStatus: Boolean, alignment: Alignment.Horizontal){
         Column(modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()) {
+            .padding(8.dp),horizontalAlignment = alignment
+            ) {
             CompositionLocalProvider(LocalContentAlpha provides (if (onlineStatus)
                                                                             1f else ContentAlpha.medium)){
                 Text(text = userName,style = MaterialTheme.typography.h5)
@@ -126,6 +129,31 @@ class MainActivity : ComponentActivity() {
 
         }
 
+
+    }
+
+    @Composable
+    fun UserProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+
+        Scaffold(topBar = {AppBar()}) {
+            androidx.compose.material.Surface(modifier = Modifier.fillMaxSize(),
+            ) {
+                Column(modifier = Modifier.fillMaxWidth(),horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top) {
+                    ProfilePicture(pictureUrl = userProfile.pictureUrl, onlineStatus =userProfile.status , imageSize = 240.dp)
+                    ProfileContent(userName = userProfile.name, onlineStatus = userProfile.status,Alignment.CenterHorizontally)
+                }
+                    }
+        }
+
+        }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun UserProfileDetailsPreview() {
+        ProfileCardLayoutTheme {
+            UserProfileDetailScreen()
+        }
 
     }
 
