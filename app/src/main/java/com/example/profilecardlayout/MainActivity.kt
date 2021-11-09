@@ -77,14 +77,14 @@ class MainActivity : ComponentActivity() {
 
             Row(modifier = Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start) {
-                ProfilePicture(userProfile.drawableId,userProfile.status)
+                ProfilePicture(userProfile.pictureUrl,userProfile.status)
                 ProfileContent(userProfile.name, userProfile.status)
             }
 
         }
     }
     @Composable
-    fun ProfilePicture(drawableId:Int, onlineStatus:Boolean){
+    fun ProfilePicture(pictureUrl:String, onlineStatus:Boolean){
         Card(shape = CircleShape, border = BorderStroke(width = 2.dp, color = if (onlineStatus)
                                                                                 MaterialTheme.colors.lightGreen
                                                                                 else Color.Red
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                 contentDescription ="Content description" ,
                 modifier = Modifier.size(72.dp),contentScale = ContentScale.Crop) */
             Image(
-                painter = rememberImagePainter(drawableId,builder = {transformations(CircleCropTransformation())}),
+                painter = rememberImagePainter(pictureUrl,builder = {transformations(CircleCropTransformation())}),
                 contentDescription = "Visually differently abled",
                 modifier = Modifier.size(72.dp)
             )
