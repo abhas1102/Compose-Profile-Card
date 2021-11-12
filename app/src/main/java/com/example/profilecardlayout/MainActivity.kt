@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
@@ -34,13 +40,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             ProfileCardLayoutTheme {
 
-                MainScreen()
+                UsersApplication()
             }
         }
     }
 
     @Composable
-    fun MainScreen(userProfiles:List<UserProfile> = userProfileList) {
+    fun UsersApplication(userProfiles:List<UserProfile> = userProfileList){
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = "usersList" ){
+            composable("usersList"){
+                MainScreen(userProfiles,navController)
+            }
+            composable("userDetails"){
+                UserProfileDetailScreen()
+            }
+        }
+    }
+
+    @Composable
+    fun MainScreen(userProfiles:List<UserProfile>,navController: NavHostController?) {
 
         Scaffold(topBar = {AppBar()}) {
             androidx.compose.material.Surface(modifier = Modifier.fillMaxSize(),
@@ -52,7 +71,9 @@ class MainActivity : ComponentActivity() {
                 } */
                 LazyColumn {
                     items(userProfiles) { userProfile->
-                        ProfileCard(userProfile = userProfile)
+                        ProfileCard(userProfile = userProfile){
+                            navController?.navigate("userDetails")
+                        }
                     }
                 }
 
@@ -70,11 +91,13 @@ class MainActivity : ComponentActivity() {
 
 
     @Composable
-    fun ProfileCard(userProfile: UserProfile){
+    fun ProfileCard(userProfile: UserProfile,clickAction: () -> Unit){
         Card(modifier = Modifier
             .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
             .fillMaxWidth()
-            .wrapContentHeight(align = Alignment.Top),elevation = 8.dp,backgroundColor = Color.White) {
+            .wrapContentHeight(align = Alignment.Top)
+            .clickable { clickAction.invoke() }
+            ,elevation = 8.dp,backgroundColor = Color.White) {
 
             Row(modifier = Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start) {
@@ -161,7 +184,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         ProfileCardLayoutTheme {
-            MainScreen()
+            MainScreen(userProfiles = userProfileList,null)
         }
 
     }
