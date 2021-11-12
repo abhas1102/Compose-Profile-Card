@@ -12,12 +12,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,7 +59,7 @@ class MainActivity : ComponentActivity() {
             composable("userDetails/{userId}", arguments = listOf(navArgument("userId"){
                 type = NavType.IntType
             })){navBackStackEntry ->
-                UserProfileDetailScreen(navBackStackEntry.arguments!!.getInt("userId"))
+                UserProfileDetailScreen(navBackStackEntry.arguments!!.getInt("userId"),navController)
             }
         }
     }
@@ -65,7 +67,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen(userProfiles:List<UserProfile>,navController: NavHostController?) {
 
-        Scaffold(topBar = {AppBar()}) {
+        Scaffold(topBar = {AppBar(title = "Users List",icon = Icons.Default.Home){ } }) {
             androidx.compose.material.Surface(modifier = Modifier.fillMaxSize(),
             ) {
                /* Column {
@@ -88,9 +90,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun AppBar(){
-        TopAppBar(navigationIcon = {Icon(Icons.Default.Home,"Content description",modifier = Modifier.padding(horizontal = 12.dp))},
-        title = { Text("Messaging Application Users")})
+    fun AppBar(title:String, icon:ImageVector,iconClick: ()->Unit){
+        TopAppBar(navigationIcon = {Icon(imageVector = icon,"Content description",
+            modifier = Modifier.padding(horizontal = 12.dp)
+                .clickable { iconClick.invoke() })},
+        title = { Text(title)})
     }
 
 
@@ -160,10 +164,13 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun UserProfileDetailScreen(userId:Int) {
+    fun UserProfileDetailScreen(userId:Int,navController: NavHostController?) {
         val userProfile = userProfileList.first { userProfile -> userId==userProfile.id  }
 
-        Scaffold(topBar = {AppBar()}) {
+        Scaffold(topBar = {AppBar(title = "User profile details",icon = Icons.Default.ArrowBack){
+            navController?.navigateUp()
+
+        } }) {
             androidx.compose.material.Surface(modifier = Modifier.fillMaxSize(),
             ) {
                 Column(modifier = Modifier.fillMaxWidth(),horizontalAlignment = Alignment.CenterHorizontally,
@@ -180,7 +187,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun UserProfileDetailsPreview() {
         ProfileCardLayoutTheme {
-            UserProfileDetailScreen(userId = 0)
+            UserProfileDetailScreen(userId = 0,null)
         }
 
     }
