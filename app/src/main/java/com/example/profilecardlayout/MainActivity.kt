@@ -25,9 +25,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
@@ -52,8 +54,10 @@ class MainActivity : ComponentActivity() {
             composable("usersList"){
                 MainScreen(userProfiles,navController)
             }
-            composable("userDetails"){
-                UserProfileDetailScreen()
+            composable("userDetails/{userId}", arguments = listOf(navArgument("userId"){
+                type = NavType.IntType
+            })){navBackStackEntry ->
+                UserProfileDetailScreen(navBackStackEntry.arguments!!.getInt("userId"))
             }
         }
     }
@@ -72,7 +76,7 @@ class MainActivity : ComponentActivity() {
                 LazyColumn {
                     items(userProfiles) { userProfile->
                         ProfileCard(userProfile = userProfile){
-                            navController?.navigate("userDetails")
+                            navController?.navigate("userDetails/${userProfile.id}")
                         }
                     }
                 }
@@ -156,7 +160,8 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun UserProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+    fun UserProfileDetailScreen(userId:Int) {
+        val userProfile = userProfileList.first { userProfile -> userId==userProfile.id  }
 
         Scaffold(topBar = {AppBar()}) {
             androidx.compose.material.Surface(modifier = Modifier.fillMaxSize(),
@@ -175,7 +180,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun UserProfileDetailsPreview() {
         ProfileCardLayoutTheme {
-            UserProfileDetailScreen()
+            UserProfileDetailScreen(userId = 0)
         }
 
     }
